@@ -1,10 +1,12 @@
 using Xunit;
-using Calculations;
 
 namespace Calculations.Tests;
 
-public class CustomerTests
+[Collection("Customer")]
+public class CustomerTests(CustomerFixture customerFixture)
 {
+    private readonly CustomerFixture _customerFixture = customerFixture;
+
     // [Fact]
     // public void Name_NotEmpty()
     // {
@@ -16,14 +18,14 @@ public class CustomerTests
     [Fact]
     public void Age_DiscountRange()
     {
-        var customer = new Customer();
+        var customer = _customerFixture.Cust;
         Assert.InRange(customer.Age, 25, 40);
     }
 
     [Fact]
     public void OrdersByName_NameNotNull()
     {
-        var customer = new Customer();
+        var customer = _customerFixture.Cust;
         Assert.Throws<ArgumentException>(() => {customer.OrdersByName(""); });
         var ex = Assert.Throws<ArgumentException>(() => {customer.OrdersByName(null!); });
         Assert.Equal("Name not be null", ex.Message);

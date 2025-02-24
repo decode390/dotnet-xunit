@@ -3,15 +3,26 @@ using Xunit.Abstractions;
 
 namespace Calculations.Tests;
 
-public class CalculatorTests: IDisposable
+public class CalculatorFixture: IDisposable {
+   public Calculator Calc => new();
+
+    public void Dispose()
+    {
+       // Clean
+    }
+}
+
+public class CalculatorTests: IDisposable, IClassFixture<CalculatorFixture>
 {
    private readonly ITestOutputHelper _testOutputHelper;
+   private readonly CalculatorFixture _calculatorFixture;
    private readonly MemoryStream _memoryStream;
 
-   public CalculatorTests(ITestOutputHelper testOutputHelper)
+   public CalculatorTests(ITestOutputHelper testOutputHelper, CalculatorFixture calculatorFixture)
    {
       _testOutputHelper = testOutputHelper;
       _testOutputHelper.WriteLine("Constructor");
+      _calculatorFixture = calculatorFixture;
       _memoryStream = new MemoryStream();
    }
 
@@ -27,7 +38,7 @@ public class CalculatorTests: IDisposable
    [Fact]
    public void AddDouble_GivenTwoDoubleValues_ReturnsDouble()
    {
-      var calc = new Calculator();
+      var calc = _calculatorFixture.Calc;
       var result = calc.AddDouble(1.2, 3.5);
       Assert.Equal(4.7, result);
    }
@@ -36,7 +47,7 @@ public class CalculatorTests: IDisposable
    [Trait("Category", "Fibonacci")]
    public void FiboNumbers_DoesntIncludeZero()
    {
-      var calc = new Calculator();
+      var calc = _calculatorFixture.Calc;
       Assert.All(calc.FiboNumbers, n => Assert.NotEqual(0, n));
    }
 
@@ -44,7 +55,7 @@ public class CalculatorTests: IDisposable
    [Trait("Category", "Fibonacci")]
    public void FiboNumbers_Includes13()
    {
-      var calc = new Calculator();
+      var calc = _calculatorFixture.Calc;
       Assert.Contains(13, calc.FiboNumbers);
    }
 
@@ -52,7 +63,7 @@ public class CalculatorTests: IDisposable
    [Trait("Category", "Fibonacci")]
    public void FiboNumbers_DoesntInclude4()
    {
-      var calc = new Calculator();
+      var calc = _calculatorFixture.Calc;
       Assert.DoesNotContain(4, calc.FiboNumbers);
    }
 
@@ -60,7 +71,7 @@ public class CalculatorTests: IDisposable
    [Trait("Category", "Fibonacci")]
    public void FiboNumbers_HasBeen()
    {
-      var calc = new Calculator();
+      var calc = _calculatorFixture.Calc;
       Assert.Equal([1,1,2,3,5,8,13], calc.FiboNumbers);
    }
 
