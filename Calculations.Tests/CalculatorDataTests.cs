@@ -34,7 +34,8 @@ public class CalculatorDataTests
 
     [Theory]
     // [MemberData(nameof(TestDataShare.IsOddOrEvenData), MemberType = typeof(TestDataShare))]
-    [MemberData(nameof(TestDataShare.IsOddOrEvenExternalData), MemberType = typeof(TestDataShare))]
+    // [MemberData(nameof(TestDataShare.IsOddOrEvenExternalData), MemberType = typeof(TestDataShare))]
+    [IsOddOrEvenData]
     public void IdOdd_TestOddAndEven(int value, bool expected){
         var calc = new Calculator();
         var result = calc.IsOdd(value);
